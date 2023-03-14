@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +26,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,75 +107,88 @@ public class UsersFragment extends Fragment {
         //init user list
 
         userList = new ArrayList<>();
-         getAllUsers();
+//         getAllUsers();
 
 
         return view;
     }
 
-    private void getAllUsers() {
-        // Lấy user hiện giờ
-
-        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        // Lấy đường dẫn Users
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-
-        //LẤY HẾT DỮ LIỆU TỪ PATH "USERS"
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
-                    ModelUser modelUser = ds.getValue(ModelUser.class);
-
-                    // Lấy mọi dữ liệu từ Users trừ user đang đăng nhập này nè
-
-                    if(!modelUser.getUid().equals(fUser.getUid())){
-                        userList.add(modelUser);
-                    }
-                    //adapter
-
-                    adapterUsers = new AdapterUsers(getActivity(), userList);
-
-                    //set adapter to recycle view
-
-                    recyclerView.setAdapter(adapterUsers);
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-    }
+//    private void getAllUsers() {
+//        // Lấy user hiện giờ
+//
+//        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+//        // Lấy đường dẫn Users
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+//
+//        //LẤY HẾT DỮ LIỆU TỪ PATH "USERS"
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                userList.clear();
+//                for (DataSnapshot ds: dataSnapshot.getChildren()){
+//                    ModelUser modelUser = ds.getValue(ModelUser.class);
+//
+//                    // Lấy mọi dữ liệu từ Users trừ user đang đăng nhập này nè
+//
+//                    if(!modelUser.getUid().equals(fUser.getUid())){
+//                        userList.add(modelUser);
+//                    }
+//                    //adapter
+//
+//                    adapterUsers = new AdapterUsers(getActivity(), userList);
+//
+//                    //set adapter to recycle view
+//
+//                    recyclerView.setAdapter(adapterUsers);
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//
+//    }
 
     private void searchUsers(String query) {
 
+        System.out.println(query);
+
+
+
         // Lấy user hiện giờ
 
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         // Lấy đường dẫn Users
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+//        query = fUser.getEmail();
+
 
         //LẤY HẾT DỮ LIỆU TỪ PATH "USERS"
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList.clear();
+
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     ModelUser modelUser = ds.getValue(ModelUser.class);
 
                     // Lấy mọi dữ liệu serach từ Users trừ user đang đăng nhập này nè
 
                     if(!modelUser.getUid().equals(fUser.getUid())){
-                        if (modelUser.getName().toLowerCase().contains(query.toLowerCase()) ||
-                                modelUser.getEmail().toLowerCase().contains(query.toLowerCase()) ){
+
+                        //tìm kiếm theo query đưa vào
+
+//                        if (modelUser.getName().toLowerCase().contains(query.toLowerCase()) ||
+//                                modelUser.getEmail().toLowerCase().contains(query.toLowerCase()) ){
+                        if (modelUser.getPhone().toLowerCase().contains(query)){
                             userList.add(modelUser);
+                            System.out.println(query);
+
 
                         }
 
@@ -231,6 +247,67 @@ public class UsersFragment extends Fragment {
 
         setHasOptionsMenu(true); // to show menu option in fragment
 
+
+
+
+        FirebaseAuth firebaseAuth;
+        FirebaseUser user;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference databaseReference;
+
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+
+
+
+        String uid = user.getUid(); //ok
+
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
+
+//        String phone = ""+ databaseReference.child(uid).child("phone").get();
+//        String phone ="software engineer";
+        Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // kiểm tra đến khi gặp đúng thông tin của user
+
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    //LẤY DATA
+                    String phone = ""+ ds.child("phone").getValue();
+                    searchUsers(phone.toLowerCase());
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+        
+
+//        String query;
+//        query = FbUser.getPhoneNumber();
+//        searchUsers(query.toLowerCase());
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -250,47 +327,61 @@ public class UsersFragment extends Fragment {
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
 
-        //Search listener
+//        Search listener
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                // Thực hiện khi user nhấn nút search
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                // Thực hiện khi user nhấn nút search
+//
+//                //query ko rỗng thì search:
+//                if (!TextUtils.isEmpty(s.trim())){
+//
+//                    searchUsers(s);
+//
+//                }else{
+//                    //Không tìm thấy query, search tất cả user
+//                    getAllUsers();
+//
+//
+//
+//                }
+//
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                if (!TextUtils.isEmpty(s.trim())){
+//
+//                    searchUsers(s);
+//
+//                }else{
+//                    //Không tìm thấy query, search tất cả user
+//                    getAllUsers();
+//
+//
+//
+//                }
+//
+//                return false;
+//            }
+//        });
 
-                //query ko rỗng thì search:
-                if (!TextUtils.isEmpty(s.trim())){
+        // Lấy user hiện giờ
 
-                    searchUsers(s);
-
-                }else{
-                    //Không tìm thấy query, search tất cả user
-                    getAllUsers();
-
-
-
-                }
-
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                if (!TextUtils.isEmpty(s.trim())){
-
-                    searchUsers(s);
-
-                }else{
-                    //Không tìm thấy query, search tất cả user
-                    getAllUsers();
+//        getAllUsers();
+//
+//        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+//        // Lấy đường dẫn Users
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+//
+//        String query;
+//        query = fUser.getEmail();
+//        searchUsers(query.toLowerCase());
 
 
-
-                }
-
-                return false;
-            }
-        });
 
 
         super.onCreateOptionsMenu(menu, inflater);
@@ -307,4 +398,12 @@ public class UsersFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    @Override
+//    public void onStart() {
+//        //check khi app startup
+//        getAllUsers();
+//
+//        super.onStart();
+//    }
 }
