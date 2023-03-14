@@ -46,9 +46,15 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
         String userName = userList.get(i).getName();
         String userEmail = userList.get(i).getEmail();
 
+        //new
+        String userPhone = userList.get(i).getPhone();
+
         //set data
         myHolder.mNameTv.setText(userName);
         myHolder.mEmailTv.setText(userEmail);
+
+        //new
+        myHolder.mPhoneTv.setText(userPhone);
         try {
             Picasso.get().load(userImage).placeholder(R.drawable.ic_default_img).into(myHolder.mAvatarIv);
 
@@ -76,7 +82,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder{
         ImageView mAvatarIv;
-        TextView mNameTv, mEmailTv;
+        TextView mNameTv, mEmailTv, mPhoneTv;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +92,8 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
             mAvatarIv = itemView.findViewById(R.id.avatarIv);
             mNameTv = itemView.findViewById(R.id.nameTv);
             mEmailTv = itemView.findViewById(R.id.emailTv);
+            //new
+            mPhoneTv = itemView.findViewById(R.id.phoneTv);
 
 //            mNameTv.findViewById(R.id.nameTv);
 //            mEmailTv.findViewById(R.id.emailTv);

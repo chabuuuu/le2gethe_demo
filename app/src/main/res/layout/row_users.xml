@@ -47,6 +47,13 @@
                 android:text="Email"
                 android:textColor="@color/black"
                 />
+            <TextView
+                android:id="@+id/phoneTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ngành học của tôi"
+                android:textColor="@color/black"
+                />
 
         </LinearLayout>
 
