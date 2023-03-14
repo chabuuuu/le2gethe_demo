@@ -121,6 +121,7 @@ public class ProfileFragment extends Fragment {
 
 
         //tìm ra user theo email để lấy thông tin
+        //SỬ DỤNG LẠI ĐỂ LÀM TÍNH NĂNG TÌM NGƯỜI CÙNG NGHÀNH
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
@@ -203,6 +204,7 @@ public class ProfileFragment extends Fragment {
                     pd.setMessage("Đang đổi ngành học của bạn");
 
                     // gọi hàm đổi ngành
+                    //sẽ update sau
 //                    showNamePhoneUpdateDialog("phone");
 
 
@@ -288,6 +290,8 @@ public class ProfileFragment extends Fragment {
 
         });
         builder.create().show();
+
+
 
 
 
