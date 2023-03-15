@@ -9,6 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+
 public class NganhActivity extends AppCompatActivity {
 
     String[] items = {"Khoa học máy tính","Kỹ thuật phần mềm", "Trí tuệ nhân tạo",
@@ -30,16 +37,47 @@ public class NganhActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nganh);
 
 
+        //Khai báo database
+        FirebaseAuth firebaseAuth;
+        FirebaseUser user;
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference databaseReference;
+
+
         autoCompleteTxt = findViewById(R.id.auto_complete_txt);
 
         adapterItems = new ArrayAdapter<String>(this,R.layout.list_item,items);
         autoCompleteTxt.setAdapter(adapterItems);
 
+
+        //Gán giá trị database
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(), "Đã chọn ngành học: "+item, Toast.LENGTH_SHORT).show();
+
+                HashMap<String,Object> result = new HashMap<>();
+                //đưa key và giả trị của nó vào hash map (vd: key là name, value là giá trị của nó)
+
+                result.put("phone", item);
+
+                if (item == "Chưa là sinh viên"){
+                    result.put("phone", "");
+
+                    databaseReference.child(user.getUid()).updateChildren(result);
+                    Toast.makeText(getApplicationContext(), "Từ giờ bạn có thể khám phá mọi người ở mọi ngành khác nhau", Toast.LENGTH_SHORT).show();
+                }else{
+                    databaseReference.child(user.getUid()).updateChildren(result);
+
+                    Toast.makeText(getApplicationContext(), "Đã chọn ngành học: "+item, Toast.LENGTH_SHORT).show();
+                }
+
+
 
             }
         });
