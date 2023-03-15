@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class DashboardActivity extends AppCompatActivity {
+    protected OnBackPressedListener onBackPressedListener;
 
     FirebaseAuth firebaseAuth;
     ActionBar actionBar;
@@ -24,6 +25,14 @@ public class DashboardActivity extends AppCompatActivity {
     //view
 
     TextView mProfileTv;
+
+    //Back listener
+
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,4 +174,14 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
 
-}
+
+
+
+
+
+
+    }
+
+
+
+

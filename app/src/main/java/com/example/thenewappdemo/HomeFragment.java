@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -24,6 +27,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class HomeFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
+    FloatingActionButton back_web;
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,8 +81,45 @@ public class HomeFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        back_web = view.findViewById(R.id.back);
+
+
+
+
+
+
+
+        WebView webView = (WebView)view.findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl("https://nhomhoctap.com/");
+
+
+
+
+        back_web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (webView.canGoBack()){
+                    webView.goBack();
+                }
+
+
+
+            }
+        });
+
+
+
+
+
+
+
+
         return view;
     }
+
+
 
 
     private void checkUserStatus(){
@@ -98,7 +142,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+
+
+
         setHasOptionsMenu(true); // to show menu option in fragment
+
 
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -107,16 +155,25 @@ public class HomeFragment extends Fragment {
         }
 
 
+
+
+
+
+
+
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         int id  = item.getItemId();
         if (id ==  R.id.action_logout){
             firebaseAuth.signOut();
@@ -124,4 +181,8 @@ public class HomeFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
 }
