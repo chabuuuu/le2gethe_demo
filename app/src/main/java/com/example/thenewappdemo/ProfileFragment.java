@@ -211,6 +211,11 @@ public class ProfileFragment extends Fragment {
                     //sẽ update sau
 //                    showNamePhoneUpdateDialog("phone");
 
+                    //Chuyển sang màn hình chọn ngành
+
+                    startActivity(new Intent(getActivity(),NganhActivity.class));
+
+
 
 
                 }
@@ -321,13 +326,21 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+
+
         setHasOptionsMenu(true); // to show menu option in fragment
+
+//        startActivity(new Intent(DashboardActivity.this,MainActivity.class));
+
+
+
 
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
 
 
     }
