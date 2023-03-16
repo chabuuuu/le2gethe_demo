@@ -1,4 +1,4 @@
-package com.example.thenewappdemo;
+package com.example.thenewappdemo.models;
 
 public class ModelUser {
     String name, email, search, phone, image, cover, uid;

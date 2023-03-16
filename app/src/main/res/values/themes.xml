@@ -13,4 +13,21 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+<!--    For activity containing toolbar-->
+
+    <style name="AppThemeNo" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="colorPrimary" >@color/design_default_color_primary</item>
+        <item name="colorPrimaryDark" >@color/design_default_color_primary_dark</item>
+<!--        <item name="colorAccent" >@colorAccent/</item>-->
+
+
+
+
+
+    </style>
+
+
+    <style name="AppThemeNo.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppThemeNo.PopUpOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

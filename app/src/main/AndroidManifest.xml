@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- quyen internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Thenewappdemo"
         tools:targetApi="31">
+        <activity
+            android:name=".ChatActivity"
+            android:theme="@style/AppThemeNo"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".NganhActivity"
             android:exported="false">
