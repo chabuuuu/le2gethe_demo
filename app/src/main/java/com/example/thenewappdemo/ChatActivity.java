@@ -92,7 +92,9 @@ public class ChatActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         //properties recycle view
-        recyclerView.setHasFixedSize(true);
+
+        //Phải bỏ cái này đi dể release được apk
+//        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
 

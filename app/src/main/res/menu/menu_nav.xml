@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:id="@+id/navi_home"
     android:title="Màn hình chính"
-    android:icon="@drawable/ic_home_black"
+    android:icon="@drawable/ic_home_new1"
     />
     <item android:id="@+id/navi_profile"
         android:title="Hồ sơ của tôi"
 
-        android:icon="@drawable/ic_profile_black"
+        android:icon="@drawable/ic_profileuser_black_2"
         /><item android:id="@+id/navi_users"
     android:title="Tìm bạn học"
-    android:icon="@drawable/ic_users_black"/>
+    android:icon="@drawable/ic_users_black_1"/>
 
     <item android:id="@+id/navi_chat"
         android:title="Chat"

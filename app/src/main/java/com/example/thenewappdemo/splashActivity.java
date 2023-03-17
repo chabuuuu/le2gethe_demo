@@ -16,7 +16,7 @@ public class splashActivity extends AppCompatActivity {
         int secondsDelayed = 1;
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));             //after 500 milliseconds this block calls the mainActivity
+                startActivity(new Intent(getApplicationContext(), DashboardActivity.class));             //after 500 milliseconds this block calls the mainActivity
                 finish();
             }
         }, secondsDelayed * 500);

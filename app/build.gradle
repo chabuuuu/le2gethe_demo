@@ -5,13 +5,14 @@ plugins {
 
 android {
     namespace 'com.example.thenewappdemo'
+//    compileSdk 33
     compileSdk 33
 
     defaultConfig {
         applicationId "com.example.thenewappdemo"
         minSdk 21
         //lúc đầu target sdk là 32,chỉnh xuống 30 để chạy đc reminder
-        targetSdk 30
+        targetSdk 31
 
 
         versionCode 1
@@ -63,6 +64,9 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+//    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+//    implementation 'androidx.work:work-runtime:2.8.0'
+    implementation 'androidx.work:work-runtime:2.7.1'
 
 
 //    //calendar library

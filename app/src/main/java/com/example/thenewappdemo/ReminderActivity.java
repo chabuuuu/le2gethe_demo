@@ -251,6 +251,7 @@ public class ReminderActivity extends AppCompatActivity {
     }
 
 
+
     private void setAlarm(String text, String date, String time) {
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigning alarm manager object to set alarm
 
