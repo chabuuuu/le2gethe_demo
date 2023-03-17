@@ -2,6 +2,7 @@ package com.example.thenewappdemo;
 
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
@@ -18,15 +19,39 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 
 //this class is to take the reminders from the user and inserts into the database
 public class ReminderActivity extends AppCompatActivity {
+
+    //FIREBASE
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference usersDbRef;
+
+    String hisUid;
+    String myUid;
+    String myname;
+    String mname;
+
+    String hisImage;
+
+
 
     Button mSubmitbtn, mDatebtn, mTimebtn;
     EditText mTitledit;
@@ -41,6 +66,25 @@ public class ReminderActivity extends AppCompatActivity {
         mDatebtn = (Button) findViewById(R.id.btnDate);                                             //assigned all the material reference to get and set data
         mTimebtn = (Button) findViewById(R.id.btnTime);
         mSubmitbtn = (Button) findViewById(R.id.btnSubmit);
+
+        //fIREBASE
+
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        usersDbRef = firebaseDatabase.getReference("Users");
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        //Nhận dữ liệu hisUid
+        Intent mhisUid = getIntent();
+        hisUid = mhisUid.getStringExtra("hisUid");
+//        myname = mhisUid.getStringExtra("name");
+        myUid = user.getUid();
+
+
+
+
+
 
 
         mTimebtn.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +114,61 @@ public class ReminderActivity extends AppCompatActivity {
                     if (time.equals("time") || date.equals("date")) {                                               //shows toast if date and time are not selected
                         Toast.makeText(getApplicationContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
                     } else {
+
+                        //Tạo node Chats
+
+                        // Tin nhắn sẽ chứa trong nhánh con message của node chats
+                        //Uid sẽ chứa trong sender và receiver
+                        myUid = user.getUid();
+
+                        Query mynameQuery = usersDbRef.orderByChild("uid").equalTo(myUid);
+                        mynameQuery.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                //chech đến khi tìm duoc info
+                                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                                    //lấy data
+                                    String name = ""+ds.child("name").getValue();
+
+
+                                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                                    String timestamp = String.valueOf(System.currentTimeMillis());
+                                    String send_to_hisuid = "Bạn có lịch hẹn học chung từ "+name+". Lời nhắn: "+title;
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    hashMap.put("sender", myUid);
+                                    hashMap.put("receiver",hisUid);
+                                    hashMap.put("title", send_to_hisuid);
+                                    hashMap.put("date",date);
+                                    hashMap.put("time", time);
+//                        hashMap.put("name", myname);
+                                    hashMap.put("list_upload", false);
+
+                                    databaseReference.child("Bookings").push().setValue(hashMap);
+//                                    mname = name;
+
+                                    System.out.println(send_to_hisuid);
+
+                                }
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+                        });
+
+
+
+
+
+
+
+
+
                         processinsert(title, date, time);
                         System.out.println(title+" "+date+" "+time);
 

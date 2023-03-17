@@ -68,6 +68,7 @@ public class ChatActivity extends AppCompatActivity {
     String myUid;
 
     String hisImage;
+    String mname;
 
 
 
@@ -87,6 +88,7 @@ public class ChatActivity extends AppCompatActivity {
     mbookingBtn = findViewById(R.id.bookingBtn);
 
 
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         //properties recycle view
@@ -102,19 +104,33 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
+
     firebaseAuth = FirebaseAuth.getInstance();
     firebaseDatabase = FirebaseDatabase.getInstance();
     usersDbRef = firebaseDatabase.getReference("Users");
 
 
+
+
         mbookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChatActivity.this, BookingActivity.class));
+                Intent mhisUid = new Intent(ChatActivity.this, BookingActivity.class);
+                mhisUid.putExtra("mhisUid",hisUid);
+//                mhisUid.putExtra("mname", mname);
+                startActivity(mhisUid);
+
+
+
+//                startActivity(new Intent(ChatActivity.this, BookingActivity.class));
                 finish();
 
             }
         });
+
+
+
+
 
 
 
@@ -126,6 +142,8 @@ public class ChatActivity extends AppCompatActivity {
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     //lấy data
                     String name = ""+ds.child("name").getValue();
+
+
                     hisImage =""+ds.child("image").getValue();
                     nameTv.setText(name);
                     try {// tìm thấy image, bắn image qua image view

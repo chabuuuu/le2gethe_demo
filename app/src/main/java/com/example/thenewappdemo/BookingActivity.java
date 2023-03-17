@@ -39,11 +39,18 @@ public class BookingActivity extends AppCompatActivity {
 //        booking_backBtn.view.findViewById(R.id.booking_back);
         booking_backBtn= (FloatingActionButton) findViewById(R.id.booking_back);
 
+        //Nhận dữ liệu hisUid từ Chat activity
+        Intent uid_intent = getIntent();
+        String mhisUid = uid_intent.getStringExtra("mhisUid");
+//        String mname = uid_intent.getStringExtra("mname");
+
         //Floating action button to change activity
         mCreateRem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ReminderActivity.class);
+                intent.putExtra("hisUid", mhisUid);
+//                intent.putExtra("name", mname);
                 startActivity(intent);                                                              //Starts the new activity to add Reminders
             }
         });
