@@ -140,10 +140,14 @@ public class ReminderActivity extends AppCompatActivity {
                                     hashMap.put("title", send_to_hisuid);
                                     hashMap.put("date",date);
                                     hashMap.put("time", time);
+                                    hashMap.put("timeTonotify", timeTonotify);
 //                        hashMap.put("name", myname);
                                     hashMap.put("list_upload", false);
 
-                                    databaseReference.child("Bookings").push().setValue(hashMap);
+//                                    databaseReference.child("Bookings").push().setValue(hashMap);
+                                    DatabaseReference reference = firebaseDatabase.getReference("Bookings");
+
+                                    reference.child(hisUid).setValue(hashMap);
 //                                    mname = name;
 
                                     System.out.println(send_to_hisuid);
@@ -195,7 +199,9 @@ public class ReminderActivity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
+                timeTonotify = i + ":" + i1;
+                System.out.println(timeTonotify);
+                //temp variable to store the time to set alarm
                 mTimebtn.setText(FormatTime(i, i1));                                                //sets the button text as selected time
             }
         }, hour, minute, false);
@@ -255,6 +261,7 @@ public class ReminderActivity extends AppCompatActivity {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String dateandtime = date + " " + timeTonotify;
+        System.out.println(timeTonotify);
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(dateandtime);
