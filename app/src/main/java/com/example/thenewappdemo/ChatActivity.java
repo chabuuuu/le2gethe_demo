@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
     TextView nameTv, userStatusTv;
     EditText messageEt;
     ImageButton sendBtn;
+    Button mbookingBtn;
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
@@ -59,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
     DatabaseReference userRefForSeen;
     List<ModelChat> chatList;
     AdapterChat adapterChat;
+
 
 
     String hisUid;
@@ -81,6 +84,7 @@ public class ChatActivity extends AppCompatActivity {
     userStatusTv = findViewById(R.id.userStatusTv);
     messageEt = findViewById(R.id.messageEt);
     sendBtn = findViewById(R.id.sendBtn);
+    mbookingBtn = findViewById(R.id.bookingBtn);
 
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -101,6 +105,18 @@ public class ChatActivity extends AppCompatActivity {
     firebaseAuth = FirebaseAuth.getInstance();
     firebaseDatabase = FirebaseDatabase.getInstance();
     usersDbRef = firebaseDatabase.getReference("Users");
+
+
+        mbookingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ChatActivity.this, BookingActivity.class));
+                finish();
+
+            }
+        });
+
+
 
         Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
         userQuery.addValueEventListener(new ValueEventListener() {

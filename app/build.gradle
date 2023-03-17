@@ -10,7 +10,10 @@ android {
     defaultConfig {
         applicationId "com.example.thenewappdemo"
         minSdk 21
-        targetSdk 32
+        //lúc đầu target sdk là 32,chỉnh xuống 30 để chạy đc reminder
+        targetSdk 30
+
+
         versionCode 1
         versionName "1.0"
 
@@ -55,6 +58,11 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
     implementation 'com.github.AtifSayings:CircularImageView:1.0.2'
+
+
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 
 //    //calendar library
